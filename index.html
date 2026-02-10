@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>FunLessons – Flashcards 2 (Corrected)</title>
+<title>FunLessons – Flashcards 3</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
 <style>
@@ -51,10 +51,32 @@ header {
     background: #fff;
     border-bottom: 2px solid #eee;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     gap: 10px;
     align-items: center;
 }
+
+/* Panel de selección múltiple */
+#multiSelectContainer {
+    display: none;
+    background: #f0f2f1;
+    padding: 15px;
+    border-radius: 15px;
+    margin: 10px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    border: 2px solid var(--accent);
+}
+
+.check-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    color: #444;
+}
+
 select {
     padding: 10px 20px;
     border-radius: 25px;
@@ -126,11 +148,9 @@ transform: rotateY(180deg); border-color: var(--accent); }
     filter: drop-shadow(0 5px 5px rgba(0,0,0,0.1));
 }
 
-.word-text { font-size: 2.5rem; font-weight: bold; text-transform: uppercase; margin-bottom: 10px; text-align: center;
-}
+.word-text { font-size: 2.5rem; font-weight: bold; text-transform: uppercase; margin-bottom: 10px; text-align: center; }
 .tap-hint { font-size: 0.9rem; color: #aaa; margin-top: 10px; opacity: 0.7; }
-.tap-hint.white { color: rgba(255,255,255,0.8);
-}
+.tap-hint.white { color: rgba(255,255,255,0.8); }
 
 .nav-controls {
     display: flex;
@@ -152,8 +172,7 @@ transform: rotateY(180deg); border-color: var(--accent); }
 }
 
 .nav-btn:disabled { border-color: #ccc; color: #ccc; }
-.counter { font-size: 1.1rem;
-font-weight: bold; color: #777; background: #eee; padding: 5px 15px; border-radius: 15px; }
+.counter { font-size: 1.1rem; font-weight: bold; color: #777; background: #eee; padding: 5px 15px; border-radius: 15px; }
 
 .sound-btn-small {
     background: rgba(255,255,255,0.2);
@@ -172,20 +191,37 @@ font-weight: bold; color: #777; background: #eee; padding: 5px 15px; border-radi
     <header><div class="logo">⚡ Flashcards 3 <span>🇬🇧</span></div></header>
 
     <div class="controls-top">
-        <label style="font-weight:bold; color:#666;">Topic:</label>
-        <select id="categorySelect" onchange="changeCategory()">
-            <option value="ALL">🌟 Mix (All)</option>
-            <option value="DAYS">🗓️ Days</option>
-            <option value="ROUTINES">⏰ Routines</option>
-            <option value="TRANSPORT">🚗 Transport</option>
-            <option value="SUBJECTS">📚 Subjects</option>
-            <option value="TOWN">🏙️ Town</option>
-            <option value="ANIMALS">🦁 Animals</option>
-            <option value="ANIMALS_BODY">🦴 Animals body</option>
-            <option value="ACTIONS">🏃 Actions</option>
-            <option value="HOBBIES">🎨 Hobbies</option>
-            <option value="FOOD">🍎 Food</option>
-        </select>
+        <div style="display:flex; align-items:center; gap:10px;">
+            <label style="font-weight:bold; color:#666;">Topic:</label>
+            <select id="categorySelect" onchange="toggleMultiSelect()">
+                <option value="ALL">🌟 All Topics</option>
+                <option value="MIX_TOPICS">🌪️ Mix Topics</option>
+                <option value="DAYS">🗓️ Days</option>
+                <option value="ROUTINES">⏰ Routines</option>
+                <option value="TRANSPORT">🚗 Transport</option>
+                <option value="SUBJECTS">📚 Subjects</option>
+                <option value="TOWN">🏙️ Town</option>
+                <option value="ANIMALS">🦁 Animals</option>
+                <option value="ANIMALS_BODY">🦴 Animals body</option>
+                <option value="ACTIONS">🏃 Actions</option>
+                <option value="HOBBIES">🎨 Hobbies</option>
+                <option value="FOOD">🍎 Food</option>
+            </select>
+        </div>
+
+        <div id="multiSelectContainer">
+            <label class="check-item"><input type="checkbox" value="DAYS">🗓️ Days</label>
+            <label class="check-item"><input type="checkbox" value="ROUTINES">⏰ Routines</label>
+            <label class="check-item"><input type="checkbox" value="TRANSPORT">🚗 Transport</label>
+            <label class="check-item"><input type="checkbox" value="SUBJECTS">📚 Subjects</label>
+            <label class="check-item"><input type="checkbox" value="TOWN">🏙️ Town</label>
+            <label class="check-item"><input type="checkbox" value="ANIMALS">🦁 Animals</label>
+            <label class="check-item"><input type="checkbox" value="ANIMALS_BODY">🦴 Body</label>
+            <label class="check-item"><input type="checkbox" value="ACTIONS">🏃 Actions</label>
+            <label class="check-item"><input type="checkbox" value="HOBBIES">🎨 Hobbies</label>
+            <label class="check-item"><input type="checkbox" value="FOOD">🍎 Food</label>
+            <button onclick="applyAndClose()" style="grid-column: span 2; background: var(--accent); color: white; border: none; padding: 10px; border-radius: 15px; font-weight: bold; cursor: pointer;">Apply Mix</button>
+        </div>
     </div>
 
     <div class="scene">
@@ -211,7 +247,6 @@ font-weight: bold; color: #777; background: #eee; padding: 5px 15px; border-radi
 
 <script>
 const vocab = [
-    // DAYS
     {en:"MONDAY", img:"Monday.png", cat:"DAYS", isImage: true},
     {en:"TUESDAY", img:"Tuesday.png", cat:"DAYS", isImage: true},
     {en:"WEDNESDAY", img:"Wednesday.png", cat:"DAYS", isImage: true},
@@ -219,8 +254,6 @@ const vocab = [
     {en:"FRIDAY", img:"Friday.png", cat:"DAYS", isImage: true},
     {en:"SATURDAY", img:"Saturday.png", cat:"DAYS", isImage: true},
     {en:"SUNDAY", img:"Sunday.png", cat:"DAYS", isImage: true},
-
-    // ROUTINES
     {en:"GET UP", img:"get up.png", cat:"ROUTINES", isImage: true},
     {en:"GO HOME", img:"go home.png", cat:"ROUTINES", isImage: true},
     {en:"GO TO BED", img:"go to bed.png", cat:"ROUTINES", isImage: true},
@@ -229,8 +262,6 @@ const vocab = [
     {en:"HAVE BREAKFAST", img:"have breakfast.png", cat:"ROUTINES", isImage: true},
     {en:"HAVE DINNER", img:"have dinner.png", cat:"ROUTINES", isImage: true},
     {en:"HAVE LUNCH", img:"have lunch.png", cat:"ROUTINES", isImage: true},
-
-    // TRANSPORT
     {en:"BIKE", img:"🚲", cat:"TRANSPORT"},
     {en:"CAR", img:"🚗", cat:"TRANSPORT"},
     {en:"BUS", img:"🚌", cat:"TRANSPORT"},
@@ -238,8 +269,6 @@ const vocab = [
     {en:"TAXI", img:"🚕", cat:"TRANSPORT"},
     {en:"PLANE", img:"✈️", cat:"TRANSPORT"},
     {en:"HELICOPTER", img:"🚁", cat:"TRANSPORT"},
-
-    // SUBJECTS
     {en:"ART", img:"🎨", cat:"SUBJECTS"},
     {en:"ENGLISH", img:"english.png", cat:"SUBJECTS", isImage: true},
     {en:"IT", img:"💻", cat:"SUBJECTS"},
@@ -248,8 +277,6 @@ const vocab = [
     {en:"PE", img:"⚽", cat:"SUBJECTS"},
     {en:"SCIENCE", img:"🧪", cat:"SUBJECTS"},
     {en:"SPANISH", img:"spanish.png", cat:"SUBJECTS", isImage: true},
-
-    // TOWN
     {en:"CITY", img:"city.png", cat:"TOWN", isImage: true},
     {en:"VILLAGE", img:"village.png", cat:"TOWN", isImage: true},
     {en:"TOWN", img:"town.png", cat:"TOWN", isImage: true},
@@ -269,8 +296,6 @@ const vocab = [
     {en:"HOTEL", img:"🏨", cat:"TOWN"},
     {en:"BEACH", img:"🏖️", cat:"TOWN"},
     {en:"LIBRARY", img:"📚", cat:"TOWN"},
-
-    // ANIMALS
     {en:"OSTRICH", img:"ostrich.png", cat:"ANIMALS", isImage: true},
     {en:"CROCODILE", img:"🐊", cat:"ANIMALS"},
     {en:"ELEPHANT", img:"🐘", cat:"ANIMALS"},
@@ -279,8 +304,6 @@ const vocab = [
     {en:"LION", img:"🦁", cat:"ANIMALS"},
     {en:"MONKEY", img:"🐒", cat:"ANIMALS"},
     {en:"TIGER", img:"🐅", cat:"ANIMALS"},
-
-    // ANIMALS BODY
     {en:"BEAK", img:"beak.png", cat:"ANIMALS_BODY", isImage: true},
     {en:"CLAWS", img:"claws.png", cat:"ANIMALS_BODY", isImage: true},
     {en:"FUR", img:"fur.png", cat:"ANIMALS_BODY", isImage: true},
@@ -289,8 +312,6 @@ const vocab = [
     {en:"WINGS", img:"wing.png", cat:"ANIMALS_BODY", isImage: true},
     {en:"LEGS", img:"legs.png", cat:"ANIMALS_BODY", isImage: true},
     {en:"EARS", img:"ears.png", cat:"ANIMALS_BODY", isImage: true},
-
-    // ACTIONS
     {en:"EAT", img:"eat.png", cat:"ACTIONS", isImage: true},
     {en:"DRINK", img:"drink.png", cat:"ACTIONS", isImage: true},
     {en:"JUMP", img:"jump.png", cat:"ACTIONS", isImage: true},
@@ -299,8 +320,6 @@ const vocab = [
     {en:"SWIM", img:"🏊", cat:"ACTIONS"},
     {en:"RUN", img:"🏃", cat:"ACTIONS"},
     {en:"WALK", img:"🚶", cat:"ACTIONS"},
-
-    // HOBBIES
     {en:"PLAYING THE RECORDER", img:"playing the recorder.png", cat:"HOBBIES", isImage: true},
     {en:"READING COMICS", img:"reading comics.png", cat:"HOBBIES", isImage: true},
     {en:"USING THE INTERNET", img:"using internet.png", cat:"HOBBIES", isImage: true},
@@ -317,8 +336,6 @@ const vocab = [
     {en:"PLAYING THE GUITAR", img:"🎸", cat:"HOBBIES"},
     {en:"RIDING A BIKE", img:"🚲", cat:"HOBBIES"},
     {en:"SINGING", img:"🎤", cat:"HOBBIES"},
-
-    // FOOD
     {en:"YOGURT", img:"yogurt.png", cat:"FOOD", isImage: true},
     {en:"BREAD", img:"🍞", cat:"FOOD"},
     {en:"CEREAL", img:"cereal.png", cat:"FOOD", isImage: true},
@@ -357,7 +374,8 @@ const ui = {
     word: document.getElementById("cardWord"),
     counter: document.getElementById("counterDisplay"),
     prevBtn: document.getElementById("prevBtn"),
-    nextBtn: document.getElementById("nextBtn")
+    nextBtn: document.getElementById("nextBtn"),
+    multiPanel: document.getElementById("multiSelectContainer")
 };
 
 function shuffleArray(array) {
@@ -368,9 +386,31 @@ function shuffleArray(array) {
     return array;
 }
 
+function toggleMultiSelect() {
+    const cat = document.getElementById("categorySelect").value;
+    ui.multiPanel.style.display = (cat === "MIX_TOPICS") ? "grid" : "none";
+    if (cat !== "MIX_TOPICS") changeCategory();
+}
+
+function applyAndClose() {
+    changeCategory();
+    ui.multiPanel.style.display = "none";
+}
+
 function changeCategory() {
     const cat = document.getElementById("categorySelect").value;
-    let tempList = (cat === "ALL") ? [...vocab] : vocab.filter(item => item.cat === cat);
+    let tempList = [];
+
+    if (cat === "ALL") {
+        tempList = [...vocab];
+    } else if (cat === "MIX_TOPICS") {
+        const checkedValues = Array.from(ui.multiPanel.querySelectorAll('input:checked')).map(cb => cb.value);
+        tempList = vocab.filter(item => checkedValues.includes(item.cat));
+    } else {
+        tempList = vocab.filter(item => item.cat === cat);
+    }
+
+    if (tempList.length === 0) return;
     currentList = shuffleArray(tempList);
     currentIndex = 0;
     resetCardFace();
