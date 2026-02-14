@@ -8,13 +8,13 @@
 <style>
 /* --- ESTILOS VISUALES "KIDS & HAPPY" --- */
 :root {
-    --primary: #ffeb3b; /* Amarillo alegre e infantil */
+    --primary: #ff9800; /* CAMBIO 5: Naranja en vez de amarillo */
     --secondary: #00e5ff; /* Cian brillante */
     --accent-purple: #d500f9; /* Magenta vibrante */
-    --bg-gradient: linear-gradient(135deg, #fffde7 0%, #fff9c4 100%);
-    --color-img-mode: #00b8d4; 
-    --color-word-mode: #d500f9;
-    --color-exam-mode: #ff6d00;
+    --bg-gradient: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%); /* Fondo naranja claro */
+    --color-img-mode: #ff9800; /* CAMBIO 1: Fondo naranja para modo Imagen-Inglés */
+    --color-word-mode: #3f51b5; /* CAMBIO 2: Fondo azul (igual que tarjetas) para modo Inglés-Imagen */
+    --color-exam-mode: #90ee90; /* CAMBIO 3: Fondo verde claro para modo Exam */
     --color-success: #4caf50; 
     --color-error: #f44336;
     --card-bg-word: #3f51b5;
@@ -29,18 +29,29 @@ body {
 .app {
     width: 100%; max-width: 500px;
     background: #ffffff; border-radius: 40px;
-    box-shadow: 0 20px 0px rgba(255, 235, 59, 0.3), 0 25px 50px rgba(0,0,0,0.1); 
+    box-shadow: 0 20px 0px rgba(255, 152, 0, 0.3), 0 25px 50px rgba(0,0,0,0.1); 
     overflow: hidden; display: flex; flex-direction: column;
     border: 4px solid var(--primary);
 }
 
 header { 
-    background: var(--primary); color: #333; padding: 18px; 
+    background: var(--primary); color: #fff; padding: 18px; 
     text-align: center; display: flex; justify-content: center; 
     align-items: center; gap: 12px; font-weight: 900; font-size: 1.3rem;
-    text-shadow: 1px 1px 0px #fff;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
 }
-header img { width: 35px; border-radius: 50%; border: 3px solid #fff; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+
+/* MODIFICACIÓN: Iconos image_0 e image_1 circulares con fondo blanco */
+header img, .mode-btn img, .flag-label { 
+    width: 35px; 
+    height: 35px;
+    background: white !important;
+    border-radius: 50% !important; 
+    border: 2px solid #fff; 
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    object-fit: contain;
+    padding: 2px;
+}
 
 .exam-bar { 
     background: #333; color: white; padding: 10px 20px; 
@@ -51,7 +62,7 @@ header img { width: 35px; border-radius: 50%; border: 3px solid #fff; box-shadow
 .progress-container { width: 100%; height: 10px; background: #f5f5f5; }
 .progress-bar { width: 0%; height: 100%; background: var(--secondary); transition: width 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
-/* BOTONES DE MODO ALEGRES */
+/* BOTONES DE MODO */
 .mode-selector { display: flex; padding: 12px; gap: 10px; background: #fff; }
 .mode-btn { 
     flex: 1; padding: 12px; border: 3px solid #eee; border-radius: 20px; 
@@ -59,22 +70,21 @@ header img { width: 35px; border-radius: 50%; border: 3px solid #fff; box-shadow
     display: flex; align-items: center; justify-content: center; gap: 6px; 
     transition: all 0.2s; font-size: 0.8rem;
 }
-.mode-btn.active.img-en { background: var(--color-img-mode); color: white; border-color: #0097a7; transform: scale(1.05); }
-.mode-btn.active.en-img { background: var(--color-word-mode); color: white; border-color: #aa00ff; transform: scale(1.05); }
-.mode-btn.exam.active { background: var(--color-exam-mode); color: white; border-color: #e65100; transform: scale(1.05); }
+.mode-btn img { width: 25px; height: 25px; }
 
-/* CAMBIO 2: Estilo para las imágenes dentro de los botones */
-.mode-btn img { width: 20px; height: 20px; object-fit: contain; vertical-align: middle; }
+.mode-btn.active.img-en { background: var(--color-img-mode); color: white; border-color: #e65100; transform: scale(1.05); }
+.mode-btn.active.en-img { background: var(--color-word-mode); color: white; border-color: #283593; transform: scale(1.05); }
+.mode-btn.exam.active { background: var(--color-exam-mode); color: #333; border-color: #76c776; transform: scale(1.05); }
 
 .controls-top { padding: 10px 20px; text-align: center; }
 select { 
     padding: 12px; border-radius: 25px; border: 3px solid var(--primary); 
-    font-weight: 800; width: 100%; cursor: pointer; color: #555; background: #fffde7;
+    font-weight: 800; width: 100%; cursor: pointer; color: #555; background: #fff3e0;
     font-size: 1rem;
 }
 
 .mix-panel { 
-    display: none; background: #fffde7; padding: 20px; margin: 0 15px 15px 15px; 
+    display: none; background: #fff3e0; padding: 20px; margin: 0 15px 15px 15px; 
     border-radius: 25px; text-align: left; max-height: 200px; overflow-y: auto; 
     border: 3px dashed var(--primary);
 }
@@ -96,7 +106,7 @@ select {
 .main-img { width: 100%; height: 180px; display: flex; align-items: center; justify-content: center; font-size: 9rem; }
 .main-img img { max-width: 95%; max-height: 95%; object-fit: contain; }
 .main-text { font-size: 2.5rem; font-weight: 900; text-transform: uppercase; text-align: center; }
-.flag-label { width: 45px; height: 45px; margin-bottom: 15px; border-radius: 50%; border: 4px solid white; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+.flag-label { margin-bottom: 15px; border: 4px solid white !important; }
 
 .exam-actions { display: none; gap: 30px; margin-top: 20px; }
 .action-btn { border: none; border-radius: 50%; width: 70px; height: 70px; color: white; font-size: 2.2rem; cursor: pointer; box-shadow: 0 8px 15px rgba(0,0,0,0.2); transition: transform 0.1s; }
@@ -105,10 +115,10 @@ select {
 
 .nav-controls { display: flex; justify-content: space-between; align-items: center; padding: 20px 40px; background: #fff; }
 .nav-btn { 
-    background: var(--primary); color: #333; border: none; width: 55px; height: 55px; 
-    border-radius: 50%; font-size: 1.6rem; cursor: pointer; box-shadow: 0 6px 0px #fbc02d;
+    background: var(--primary); color: #fff; border: none; width: 55px; height: 55px; 
+    border-radius: 50%; font-size: 1.6rem; cursor: pointer; box-shadow: 0 6px 0px #e65100;
 }
-.nav-btn:active { transform: translateY(3px); box-shadow: 0 3px 0px #fbc02d; }
+.nav-btn:active { transform: translateY(3px); box-shadow: 0 3px 0px #e65100; }
 .nav-btn:disabled { background: #eee; box-shadow: none; opacity: 0.5; }
 .counter { font-weight: 900; color: #555; font-size: 1.1rem; }
 
@@ -126,7 +136,7 @@ select {
     <div class="progress-container"><div id="progressBar" class="progress-bar"></div></div>
 
     <header>
-        <img src="image_0.png"> FLASHCARDS YEAR 3 <img src="image_0.png">
+        <img src="image_0.png"> Picture Dictionary 3 <img src="image_0.png">
     </header>
 
     <div class="mode-selector">
@@ -138,14 +148,14 @@ select {
     <div class="controls-top">
         <select id="categorySelect" onchange="handleCategoryChange()">
             <option value="ALL">🌟 All Topics</option>
-            <option value="MIXED">🧩 Mix Topics</option>
+            <option value="MIXED">🧩 Mixed Topics</option>
         </select>
     </div>
 
     <div id="mixPanel" class="mix-panel">
         <strong>Choose your topics:</strong><hr>
         <div id="mixCheckboxes"></div>
-        <button style="width:100%; margin-top:15px; background:var(--primary); color:#333; border:none; padding:10px; border-radius:15px; font-weight:bold; cursor:pointer;" onclick="changeCategory()">Start!</button>
+        <button style="width:100%; margin-top:15px; background:var(--primary); color:#fff; border:none; padding:10px; border-radius:15px; font-weight:bold; cursor:pointer;" onclick="changeCategory()">Start!</button>
     </div>
 
     <div class="scene">
@@ -176,7 +186,7 @@ select {
 </div>
 
 <script>
-/* --- VOCABULARIO COMPLETO  --- */
+/* El script se mantiene íntegro según el original */
 const vocab = [
     {en:"MONDAY", img:"Monday.png", cat:"DAYS", isImage: true}, {en:"TUESDAY", img:"Tuesday.png", cat:"DAYS", isImage: true},
     {en:"WEDNESDAY", img:"Wednesday.png", cat:"DAYS", isImage: true}, {en:"THURSDAY", img:"Thursday.png", cat:"DAYS", isImage: true},
@@ -233,12 +243,10 @@ const vocab = [
     {en:"CAULIFLOWER", img:"cauliflower.png", cat:"FOOD", isImage: true}, {en:"PEAS", img:"🫛", cat:"FOOD"}
 ];
 
-/* --- LÓGICA --- */
 let currentList = [], currentIndex = 0, isFlipped = false, errorList = [];
 let gameMode = 'IMG-EN', isExamMode = false;
 let seconds = 0, timerInterval = null, correct = 0, wrong = 0, currentStreak = 0;
 
-// CAMBIO 3: Sistema de sonido para acierto/error usando Web Audio API (sin archivos externos)
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 function playFeedbackSound(isCorrect) {
     const oscillator = audioCtx.createOscillator();
@@ -247,7 +255,6 @@ function playFeedbackSound(isCorrect) {
     gainNode.connect(audioCtx.destination);
     
     if (isCorrect) {
-        // Sonido de acierto (tipo "ding" agudo)
         oscillator.type = 'sine';
         oscillator.frequency.setValueAtTime(600, audioCtx.currentTime); 
         oscillator.frequency.exponentialRampToValueAtTime(1000, audioCtx.currentTime + 0.1);
@@ -255,7 +262,6 @@ function playFeedbackSound(isCorrect) {
         gainNode.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.3);
         oscillator.start(); oscillator.stop(audioCtx.currentTime + 0.3);
     } else {
-        // Sonido de error (tipo "buzz" grave)
         oscillator.type = 'sawtooth';
         oscillator.frequency.setValueAtTime(150, audioCtx.currentTime);
         gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime);
@@ -327,9 +333,7 @@ function resetExam() {
 }
 
 function markResult(isCorrect) {
-    // CAMBIO 3: Reproducir sonido al marcar resultado
     playFeedbackSound(isCorrect);
-    
     if(isCorrect) { correct++; currentStreak++; } 
     else { wrong++; currentStreak = 0; errorList.push(currentList[currentIndex]); }
     ui.scoreCorrect.textContent = correct; ui.scoreWrong.textContent = wrong; ui.streak.textContent = currentStreak;
@@ -373,13 +377,11 @@ function updateUI() {
         item.isImage ? ui.imgFront.innerHTML = `<img src="${item.img}">` : ui.imgFront.innerHTML = item.img;
         ui.faceBack.className = 'card-face back face-word';
         ui.textBack.textContent = item.en;
-        // Usamos image_0.png (bandera) para indicar la palabra en inglés
         ui.flagBack.src = "image_0.png";
         ui.flagBack.style.display = "block";
     } else {
         ui.faceFront.className = 'card-face front face-word';
         ui.textFront.textContent = item.en;
-        // Usamos image_0.png (bandera) para indicar la palabra en inglés
         ui.flagFront.src = "image_0.png";
         ui.flagFront.style.display = "block";
         ui.faceBack.className = 'card-face back face-img';
@@ -395,7 +397,6 @@ function updateUI() {
 function flipCard() { 
     isFlipped = !isFlipped; 
     ui.card.classList.toggle("is-flipped", isFlipped); 
-    // CAMBIO 4: Reproducir audio siempre al girar (incluido modo examen)
     if(isFlipped) setTimeout(playCurrentAudio, 200); 
 }
 
